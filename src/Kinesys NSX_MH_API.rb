@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'json'
 require 'net/https'
-require 'url'
+require 'uri'
 
 class NsxController
 
@@ -17,4 +17,30 @@ class NsxController
 
     def login
 
-        uri = URI.parse("")
+        uri = URI.parse("#{@prefix}/login")
+        web = https(uri)
+
+        web.start {
+
+            response = web.post(uri.path, "username=#{@username}&password=#{@password}")
+
+            @cookie = response.get_fields( 'Set-Cookie' )[0]
+
+        }
+
+    end
+
+    def logout
+        
+        uri = URI.parse("#{@prefix}/logout")
+        web = https(uri)
+
+        web.start {
+
+            response = web.get(uri.path, {'Cookie' => @cookie})
+
+        }
+    
+    end
+
+    def 
