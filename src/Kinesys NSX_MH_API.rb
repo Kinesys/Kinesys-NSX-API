@@ -43,4 +43,20 @@ class NsxController
     
     end
 
-    def 
+    def create_transport_zone(body={})
+
+        api("/transport-zone", :post, body)
+
+    end
+
+    def delete_transport_zone(zone_uuid)
+
+        api("/transport-zone/#{zone_uuid}", :delete)
+
+    end
+    
+    def create_logical_switch(body={})
+
+        api("/Iswitch", :post, body)
+
+    end
