@@ -111,4 +111,31 @@ class NsxController
 
     def api(path, method, body={})
 
-        uri = URI.parse("#{@prefix}#{path}")
+        uri = URI.parse("#{@prefix}#{path}")   
+
+        web = https(uri)
+
+        web.start {
+            case method
+            
+            when :get
+                response = web.get(uri.path, {'Cookie' => @cookie})
+            when :post
+                response = web.post(uri.path, JSON.generate(body), {'Cookie' => @cookie})
+            when :put
+                response = web.put(uri.path, JSON.generate(body), {'Cookie' => @cookie})
+            when :delete
+                response = web.delete(uri.path, {'Cookie' => @cookie})
+            else
+                raise "unsupported method #{method}"
+            end
+            
+            if response.body
+                JSON.parse(response.body)
+            else
+                {}
+            end
+        }
+    end
+
+end
